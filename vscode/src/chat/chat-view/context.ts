@@ -18,6 +18,7 @@ import { logDebug, logError } from '../../log'
 import { viewRangeToRange } from './chat-helpers'
 import type { RemoteSearch } from '../../context/remote-search'
 import type { ContextItem } from '../../prompt-builder/types'
+import { ContextRankingController } from '../../local-context/context-ranking'
 
 const isAgentTesting = process.env.CODY_SHIM_TESTING === 'true'
 
@@ -36,6 +37,7 @@ export interface GetEnhancedContextOptions {
     hints: {
         maxChars: number
     }
+    contextRanking: ContextRankingController | null
     // TODO(@philipp-spiess): Add abort controller to be able to cancel expensive retrievers
 }
 export async function getEnhancedContext({
@@ -45,6 +47,7 @@ export async function getEnhancedContext({
     providers,
     featureFlags,
     hints,
+    contextRanking,
 }: GetEnhancedContextOptions): Promise<ContextItem[]> {
     if (featureFlags.internalUnstable) {
         return getEnhancedContextFused({
@@ -54,6 +57,7 @@ export async function getEnhancedContext({
             providers,
             featureFlags,
             hints,
+            contextRanking
         })
     }
     const searchContext: ContextItem[] = []
@@ -102,7 +106,11 @@ export async function getEnhancedContext({
     }
 
     const priorityContext = await getPriorityContext(text, editor, searchContext)
-    return priorityContext.concat(searchContext)
+    let allContext = priorityContext.concat(searchContext)
+    if (contextRanking) {
+        allContext = await contextRanking.rankContextItems(text, allContext)
+    }
+    return allContext
 }
 
 async function getEnhancedContextFused({
@@ -111,6 +119,7 @@ async function getEnhancedContextFused({
     text,
     providers,
     hints,
+    contextRanking,
 }: GetEnhancedContextOptions): Promise<ContextItem[]> {
     // use user attention context only if config is set to none
     if (strategy === 'none') {
@@ -152,7 +161,11 @@ async function getEnhancedContextFused({
     const fusedContext = fuseContext(keywordContextItems, embeddingsContextItems, hints.maxChars)
 
     const priorityContext = await getPriorityContext(text, editor, fusedContext)
-    return priorityContext.concat(fusedContext)
+    let allContext = priorityContext.concat(fusedContext)
+    if (contextRanking) {
+        allContext = await contextRanking.rankContextItems(text, allContext)
+    }
+    return allContext
 }
 
 async function searchRemote(
