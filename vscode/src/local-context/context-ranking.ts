@@ -12,6 +12,7 @@ import { spawnBfg } from '../graph/bfg/spawn-bfg'
 import { captureException } from '../services/sentry/sentry'
 import { FileURI, isFileURI } from '@sourcegraph/cody-shared'
 import { URI } from 'vscode-uri'
+import { RankContextItem } from '../jsonrpc/context-ranking-protocol'
 
 export interface ContextRanker {
     rankContextItems(query: string, contextItems: ContextItem[]): Promise<ContextItem[]>   
@@ -64,7 +65,8 @@ export class ContextRankingController implements ContextRanker{
     // Tries loading the features at the start of the service and if not exist, try compute the features
     private async eagerlyLoad(repoDir: FileURI): Promise<boolean> {
         try {
-            const doesFeaturesExist = await (await this.getService()).request(
+            const service = await this.getService()
+            const doesFeaturesExist = await service.request(
                 'context-ranking/load-features',
                 repoDir.fsPath
             )
@@ -139,30 +141,56 @@ export class ContextRankingController implements ContextRanker{
     }
 
     public async rankContextItems(query: string, contextItems: ContextItem[]): Promise<ContextItem[]> {
-        if (!this.endpointIsDotcom) {
-            return contextItems
-        }
-        if (!this.serviceStarted || !this.doesFeaturesExist) {
-            return contextItems
-        }
+        // if (!this.endpointIsDotcom) {
+        //     return contextItems
+        // }
+        // if (!this.serviceStarted || !this.doesFeaturesExist) {
+        //     return contextItems
+        // }
+        console.log(`values: ${this.endpointIsDotcom}, ${this.serviceStarted}`)
         try {
             const service = await this.getService()
-            const resp = await service.request('context-ranking/rank-items', {
-                contextItems: contextItems,
+            const rankItems = this.convertContextItemsToRankItems(contextItems)
+            const rankedItemsOrder = await service.request('context-ranking/rank-items', {
+                rankContextItem: rankItems,
                 query: query,
             })
-            const reRankedContextItems = resp.contextItems
             // ToDo: Add more checks to ensure validity of reRanked Items
-            if (reRankedContextItems.length!== contextItems.length) {
-                logDebug('ContextRankingController', 'rank-items', 'unexpected-response, length of reranked items does not match', 'original items', JSON.stringify(contextItems), ' reranked items', JSON.stringify(reRankedContextItems))
+            if (rankedItemsOrder.rankContextItem.length!== contextItems.length) {
+                logDebug('ContextRankingController', 'rank-items', 'unexpected-response, length of reranked items does not match', 'original items', JSON.stringify(contextItems), ' reranked items', JSON.stringify(rankedItemsOrder.rankContextItem))
                 return contextItems
             }
+            const reRankedContextItems = this.orderContextItemsAsRankItems(contextItems, rankedItemsOrder.rankContextItem)
             return reRankedContextItems
         } catch (error) {
             logDebug('ContextRankingController', 'rank-items', captureException(error), error)
             return contextItems
         }
     }
+
+    private convertContextItemsToRankItems(contextItems: ContextItem[]): RankContextItem[] {
+        const rankContextItems = contextItems.map((item, index) => ({
+            index: index,
+            filePath: item.uri?.path,
+            content: item.text,
+            source: item.source
+        }))
+        return rankContextItems
+    }
+
+    private orderContextItemsAsRankItems(contextItems: ContextItem[], rankedItemsOrder: RankContextItem[]): ContextItem[] {
+        let orderedContextItems: ContextItem[] = []; // Initialize the array
+        for (const rankItem of rankedItemsOrder) {
+            const newIndex = rankItem.index;
+            if(newIndex<0 || newIndex>=contextItems.length) {
+                logDebug('ContextRankingController', 'length of rankItems', JSON.stringify(rankedItemsOrder), 'does not match context items', JSON.stringify(contextItems))
+                return contextItems
+            }
+            orderedContextItems.push(contextItems[newIndex]);
+        }
+        return orderedContextItems;
+    }
+    
 }
 
 

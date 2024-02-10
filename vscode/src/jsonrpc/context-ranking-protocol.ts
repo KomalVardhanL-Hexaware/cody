@@ -1,5 +1,3 @@
-import { ContextItem } from '../prompt-builder/types'
-
 interface InitializeParams {
     indexPath: string
 }
@@ -9,8 +7,15 @@ interface ComputeFeaturesParams {
     BM25ChunkingStrategy: 'file-level-chunking'
 }
 
+export interface RankContextItem {
+    index: number,
+    filePath?: string,
+    content: string,
+    source?: string
+}
+
 interface RankItemsParams {
-    contextItems: ContextItem[],
+    rankContextItem: RankContextItem[],
     query: string
 }
 
