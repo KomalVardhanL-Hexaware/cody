@@ -45,7 +45,7 @@ import { AgentHandlerTelemetryRecorderProvider } from './telemetry'
 import * as vscode_shim from './vscode-shim'
 import type { CommandResult } from '../../vscode/src/main'
 import type { FixupTask } from '../../vscode/src/non-stop/FixupTask'
-import { CodyTaskState } from '../../vscode/src/non-stop/utils'
+import { isTerminalCodyTaskState } from '../../vscode/src/non-stop/utils'
 import { IndentationBasedFoldingRangeProvider } from '../../vscode/src/lsp/foldingRanges'
 import { AgentCodeLenses } from './AgentCodeLenses'
 import { emptyEvent } from '../../vscode/src/testutils/emptyEvent'
@@ -814,6 +814,7 @@ export class Agent extends MessageHandler {
     }
 
     private codeLensToken = new vscode.CancellationTokenSource()
+
     private async updateCodeLenses(): Promise<void> {
         const uri = this.workspace.activeDocumentFilePath
         if (!uri) {
@@ -836,6 +837,7 @@ export class Agent extends MessageHandler {
             codeLenses: lenses,
         })
     }
+
     private async provideCodeLenses(
         provider: vscode.CodeLensProvider,
         document: vscode.TextDocument
@@ -960,11 +962,8 @@ export class Agent extends MessageHandler {
                 state: newState,
                 error: this.codyError(result.task?.error),
             })
-            switch (newState) {
-                case CodyTaskState.finished:
-                case CodyTaskState.error:
-                    disposable.dispose()
-                    break
+            if (isTerminalCodyTaskState(newState)) {
+                disposable.dispose()
             }
         })
         return {

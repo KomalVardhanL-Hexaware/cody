@@ -180,7 +180,7 @@ export type Notifications = {
     // Client -> Server
     // ================
 
-    // The 'initalized' notification must be sent after receiving the 'initialize' response.
+    // The 'initialized' notification must be sent after receiving the 'initialize' response.
     initialized: [null]
     // The 'exit' notification must be sent after the client receives the 'shutdown' response.
     exit: [null]

@@ -15,7 +15,8 @@ import type { CodyCommandArgs } from '../types'
 export async function executeDocCommand(
     args?: Partial<CodyCommandArgs>
 ): Promise<EditCommandResult | undefined> {
-    logDebug('executeDocCommand', 'executing', { args })
+    const argsString = args ? JSON.stringify(args) : 'undefined'
+    logDebug('executeDocCommand', 'executing', { argsString })
     let prompt = defaultCommands.doc.prompt
 
     if (args?.additionalInstruction) {
