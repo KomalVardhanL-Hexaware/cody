@@ -7,19 +7,20 @@ import envPaths from 'env-paths'
 import * as vscode from 'vscode'
 
 import {
+    type BillingCategory,
+    type BillingProduct,
     convertGitCloneURLToCodebaseName,
     FeatureFlag,
     featureFlagProvider,
     graphqlClient,
+    isCodyIgnoredFile,
+    isError,
     isRateLimitError,
+    logDebug,
     logError,
+    ModelProvider,
     NoOpTelemetryRecorderProvider,
     setUserAgent,
-    type BillingCategory,
-    type BillingProduct,
-    logDebug,
-    isError,
-    isCodyIgnoredFile,
 } from '@sourcegraph/cody-shared'
 import type { TelemetryEventParameters } from '@sourcegraph/telemetry'
 
@@ -52,6 +53,7 @@ import { AgentCodeLenses } from './AgentCodeLenses'
 import { emptyEvent } from '../../vscode/src/testutils/emptyEvent'
 import type { PollyRequestError } from './cli/jsonrpc'
 import { AgentWorkspaceEdit } from '../../vscode/src/testutils/AgentWorkspaceEdit'
+import { ModelUsage } from '../../lib/shared/src/models/types'
 
 const inMemorySecretStorageMap = new Map<string, string>()
 const globalState = new AgentGlobalState()
@@ -710,7 +712,16 @@ export class Agent extends MessageHandler {
         })
 
         this.registerAuthenticatedRequest('chat/restore', async ({ modelID, messages, chatID }) => {
-            const chatModel = new SimpleChatModel(modelID, [], chatID)
+            let chatModel
+            if (modelID === null || modelID === undefined) {
+                const defaultModel = ModelProvider.get(ModelUsage.Chat).at(0)?.model
+                if (!defaultModel) {
+                    throw new Error('No default chat model found')
+                }
+                chatModel = new SimpleChatModel(defaultModel, [], chatID)
+            } else {
+                chatModel = new SimpleChatModel(modelID!, [], chatID)
+            }
             for (const message of messages) {
                 if (message.error) {
                     chatModel.addErrorAsBotMessage(message.error)
