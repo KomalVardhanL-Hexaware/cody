@@ -19283,176 +19283,10 @@ log:
         queryString: []
         url: https://sourcegraph.com/.api/completions/stream
       response:
-        bodySize: 1264
+        bodySize: 2067
         content:
           mimeType: text/event-stream
-          size: 1264
-          text: >+
-            event: completion
-
-            data: {"completion":" I","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude,","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created by","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created by An","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created by Anthrop","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created by Anthropic","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created by Anthropic.","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm Claude, an AI assistant created by Anthropic.","stopReason":"stop_sequence"}
-
-
-            event: done
-
-            data: {}
-
-        cookies: []
-        headers:
-          - name: date
-            value: Tue, 13 Feb 2024 13:36:58 GMT
-          - name: content-type
-            value: text/event-stream
-          - name: transfer-encoding
-            value: chunked
-          - name: connection
-            value: keep-alive
-          - name: access-control-allow-credentials
-            value: "true"
-          - name: access-control-allow-origin
-            value: ""
-          - name: cache-control
-            value: no-cache
-          - name: vary
-            value: Cookie,Accept-Encoding,Authorization,Cookie, Authorization,
-              X-Requested-With,Cookie
-          - name: x-content-type-options
-            value: nosniff
-          - name: x-frame-options
-            value: DENY
-          - name: x-xss-protection
-            value: 1; mode=block
-          - name: strict-transport-security
-            value: max-age=31536000; includeSubDomains; preload
-        headersSize: 1289
-        httpVersion: HTTP/1.1
-        redirectURL: ""
-        status: 200
-        statusText: OK
-      startedDateTime: 2024-02-13T13:36:54.952Z
-      time: 0
-      timings:
-        blocked: -1
-        connect: -1
-        dns: -1
-        receive: 0
-        send: 0
-        ssl: -1
-        wait: 0
-    - _id: 37bcad611d12b5f3f8be7e87e7db0736
-      _order: 0
-      cache: {}
-      request:
-        bodySize: 481
-        cookies: []
-        headers:
-          - name: content-type
-            value: application/json
-          - name: accept-encoding
-            value: gzip;q=0
-          - name: authorization
-            value: token
-              REDACTED_3709f5bf232c2abca4c612f0768368b57919ca6eaa470e3fd7160cbf3e8d0ec3
-          - name: user-agent
-            value: defaultClient / v1
-          - name: host
-            value: sourcegraph.com
-        headersSize: 263
-        httpVersion: HTTP/1.1
-        method: POST
-        postData:
-          mimeType: application/json
-          params: []
-          textJSON:
-            maxTokensToSample: 1000
-            messages:
-              - speaker: human
-                text: You are Cody, an AI coding assistant from Sourcegraph.
-              - speaker: assistant
-                text: I am Cody, an AI coding assistant from Sourcegraph.
-              - speaker: human
-                text: What model are you?
-              - speaker: assistant
-                text: " I'm Claude, an AI assistant created by Anthropic."
-              - speaker: human
-                text: What model are you?
-              - speaker: assistant
-            model: anthropic/claude-2.0
-            temperature: 0
-            topK: -1
-            topP: -1
-        queryString: []
-        url: https://sourcegraph.com/.api/completions/stream
-      response:
-        bodySize: 2465
-        content:
-          mimeType: text/event-stream
-          size: 2465
+          size: 2067
           text: >+
             event: completion
 
@@ -19506,67 +19340,52 @@ log:
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic.","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful,","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful, harmless","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful, harmless,","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful, harmless, and","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific model","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful, harmless, and honest","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific model name","stopReason":""}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful, harmless, and honest.","stopReason":""}
 
 
             event: completion
 
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific model name or","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific model name or version","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific model name or version.","stopReason":""}
-
-
-            event: completion
-
-            data: {"completion":" I'm an AI assistant created by Anthropic. I don't have a specific model name or version.","stopReason":"stop_sequence"}
+            data: {"completion":" I'm an AI assistant created by Anthropic to be helpful, harmless, and honest.","stopReason":"stop_sequence"}
 
 
             event: done
@@ -19576,7 +19395,7 @@ log:
         cookies: []
         headers:
           - name: date
-            value: Tue, 13 Feb 2024 13:36:59 GMT
+            value: Thu, 15 Feb 2024 10:46:45 GMT
           - name: content-type
             value: text/event-stream
           - name: transfer-encoding
@@ -19600,12 +19419,234 @@ log:
             value: 1; mode=block
           - name: strict-transport-security
             value: max-age=31536000; includeSubDomains; preload
-        headersSize: 1289
+        headersSize: 1293
         httpVersion: HTTP/1.1
         redirectURL: ""
         status: 200
         statusText: OK
-      startedDateTime: 2024-02-13T13:36:58.442Z
+      startedDateTime: 2024-02-15T10:46:43.595Z
+      time: 0
+      timings:
+        blocked: -1
+        connect: -1
+        dns: -1
+        receive: 0
+        send: 0
+        ssl: -1
+        wait: 0
+    - _id: 7baf8865ac7ba61d520ec116d677cb6b
+      _order: 0
+      cache: {}
+      request:
+        bodySize: 509
+        cookies: []
+        headers:
+          - name: content-type
+            value: application/json
+          - name: accept-encoding
+            value: gzip;q=0
+          - name: authorization
+            value: token
+              REDACTED_3709f5bf232c2abca4c612f0768368b57919ca6eaa470e3fd7160cbf3e8d0ec3
+          - name: user-agent
+            value: defaultClient / v1
+          - name: host
+            value: sourcegraph.com
+        headersSize: 263
+        httpVersion: HTTP/1.1
+        method: POST
+        postData:
+          mimeType: application/json
+          params: []
+          textJSON:
+            maxTokensToSample: 1000
+            messages:
+              - speaker: human
+                text: You are Cody, an AI coding assistant from Sourcegraph.
+              - speaker: assistant
+                text: I am Cody, an AI coding assistant from Sourcegraph.
+              - speaker: human
+                text: What model are you?
+              - speaker: assistant
+                text: " I'm an AI assistant created by Anthropic to be helpful, harmless, and
+                  honest."
+              - speaker: human
+                text: What model are you?
+              - speaker: assistant
+            model: anthropic/claude-2.0
+            temperature: 0
+            topK: -1
+            topP: -1
+        queryString: []
+        url: https://sourcegraph.com/.api/completions/stream
+      response:
+        bodySize: 2932
+        content:
+          mimeType: text/event-stream
+          size: 2932
+          text: >+
+            event: completion
+
+            data: {"completion":" I","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version.","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by An","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthrop","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using their","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using their conversational","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using their conversational AI","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using their conversational AI technology","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using their conversational AI technology.","stopReason":""}
+
+
+            event: completion
+
+            data: {"completion":" I don't have a specific model name or version. I was created by Anthropic using their conversational AI technology.","stopReason":"stop_sequence"}
+
+
+            event: done
+
+            data: {}
+
+        cookies: []
+        headers:
+          - name: date
+            value: Thu, 15 Feb 2024 10:46:47 GMT
+          - name: content-type
+            value: text/event-stream
+          - name: transfer-encoding
+            value: chunked
+          - name: connection
+            value: keep-alive
+          - name: access-control-allow-credentials
+            value: "true"
+          - name: access-control-allow-origin
+            value: ""
+          - name: cache-control
+            value: no-cache
+          - name: vary
+            value: Cookie,Accept-Encoding,Authorization,Cookie, Authorization,
+              X-Requested-With,Cookie
+          - name: x-content-type-options
+            value: nosniff
+          - name: x-frame-options
+            value: DENY
+          - name: x-xss-protection
+            value: 1; mode=block
+          - name: strict-transport-security
+            value: max-age=31536000; includeSubDomains; preload
+        headersSize: 1293
+        httpVersion: HTTP/1.1
+        redirectURL: ""
+        status: 200
+        statusText: OK
+      startedDateTime: 2024-02-15T10:46:45.195Z
       time: 0
       timings:
         blocked: -1
