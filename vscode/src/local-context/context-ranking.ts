@@ -11,11 +11,11 @@ import {
 } from '@sourcegraph/cody-shared'
 import type { ContextItem } from '../prompt-builder/types'
 import { MessageHandler } from '../jsonrpc/jsonrpc'
-import { spawnBfg } from '../graph/bfg/spawn-bfg'
 import { captureException } from '../services/sentry/sentry'
 import { FileURI, isFileURI } from '@sourcegraph/cody-shared'
 import { URI } from 'vscode-uri'
 import { RankContextItem } from '../jsonrpc/context-ranking-protocol'
+import { CodyEngineService } from './cody-engine'
 
 export interface ContextRanker {
     rankContextItems(query: string, contextItems: ContextItem[]): Promise<ContextItem[]>   
@@ -66,6 +66,7 @@ export class ContextRankingController implements ContextRanker{
     public async start(): Promise<void> {
         logDebug('ContextRankingController', 'start')
         await this.getService()
+
         const repoUri = this.getRepoUri();
         if (repoUri && isFileURI(repoUri)) {
             this.computeFeatures(repoUri)
@@ -81,7 +82,7 @@ export class ContextRankingController implements ContextRanker{
         try {
             const isPrecomputeSucess = await (await this.getService()).request('context-ranking/compute-features', {
                 repoPath: repoDir.fsPath,
-                BM25ChunkingStrategy: 'full-file-chunks',
+                bm25ChunkingStrategy: 'full-file-chunks',
             })
             logDebug('ContextRankingController', 'compute-features', JSON.stringify(isPrecomputeSucess))
             this.doesFeaturesExist = isPrecomputeSucess;    
@@ -92,21 +93,14 @@ export class ContextRankingController implements ContextRanker{
 
     private getService(): Promise<MessageHandler> {
         if (!this.service) {
-            this.service = this.spawnAndBindService(this.context)
+            const instance = CodyEngineService.getInstance(this.context)
+            this.service = instance.getService()
+            instance.setupServiceHandler(this.setupContextRankingService)
         }
         return this.service
     }
 
-    private async spawnAndBindService(context: vscode.ExtensionContext): Promise<MessageHandler> {
-        const service = await new Promise<MessageHandler>((resolve, reject) => {
-            spawnBfg(context, reject).then(
-                bfg => resolve(bfg),
-                error => {
-                    captureException(error)
-                    reject(error)
-                }
-            )
-        })
+    private setupContextRankingService = async (service: MessageHandler): Promise<void> => {
         logDebug('ContextRankingController', 'spawnAndBindService', 'service started, initializing')
         let indexPath = getIndexLibraryPath()
         // Tests may override the index library path
@@ -129,7 +123,6 @@ export class ContextRankingController implements ContextRanker{
             initResult,
         )
         this.serviceStarted = true
-        return service
     }
 
     public async rankContextItems(query: string, contextItems: ContextItem[]): Promise<ContextItem[]> {
@@ -143,8 +136,8 @@ export class ContextRankingController implements ContextRanker{
             const rankItems = this.convertContextItemsToRankItems(repoUri.path, contextItems)
             const rankedItemsOrder = await service.request('context-ranking/rank-items', {
                 repoPath: repoUri.path,
-                BM25ChunkingStrategy: 'full-file-chunks',
-                ContextItems: rankItems,
+                bm25ChunkingStrategy: 'full-file-chunks',
+                contextItems: rankItems,
                 query: query,
             })
             // ToDo: Add more checks to ensure validity of reRanked Items

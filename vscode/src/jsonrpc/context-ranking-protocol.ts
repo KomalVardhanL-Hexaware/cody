@@ -4,7 +4,7 @@ interface InitializeParams {
 
 interface ComputeFeaturesParams {
     repoPath: string
-    BM25ChunkingStrategy: 'full-file-chunks'
+    bm25ChunkingStrategy: 'full-file-chunks'
 }
 
 export interface RankContextItem {
@@ -16,9 +16,9 @@ export interface RankContextItem {
 
 interface RankItemsParams {
     repoPath: string,
-    BM25ChunkingStrategy: 'full-file-chunks',
+    bm25ChunkingStrategy: 'full-file-chunks',
     query: string,
-    ContextItems: RankContextItem[],
+    contextItems: RankContextItem[],
     
 }
 
